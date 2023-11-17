@@ -1,0 +1,26 @@
+
+.div_titulopanelc{
+  margin-top: 80px;
+  width: calc(100vw - 50px);
+}
+@font-face {
+  font-family: varelaround;
+  src: url( ../fonts/Asap-Regular.ttf);
+}
+*{
+  font-family: varelaround;
+}
+.Panel_Contenido{
+  transition-timing-function: linear;
+  transition: width 0.8s, height 0.8s, transform 0.8s;
+	width: 100%;
+  height: 100%;
+
+  padding: 20px;
+  z-index: 8;
+}
+.fontitlecontent{
+  font-size: 38px;
+}
+
+
