@@ -23,7 +23,7 @@
   background-color: #f0f0f0; 
   padding: 15px;
 }
-.dark-modal .ant-modal-close {
+.dark-modal-result .ant-modal-close {
   display: none;
 }
 

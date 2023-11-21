@@ -5,7 +5,7 @@ import Modalmensaje from "./modalMensaje"
 import Modalenter from "./modalEnterCode"
 import { actionCorreo } from "../../redux/actions/login/login"
 import { useDispatch } from "react-redux";
-import logo from "../../assets/img/logo.jpg";
+import logo from "../../assets/img/logo.png";
 
 import { FloatingLabel, Form } from "react-bootstrap";
 function Home({ show, setShow }) {

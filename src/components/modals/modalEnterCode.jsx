@@ -5,7 +5,7 @@ import Modalmensaje from "./modalMensaje";
 import Modalnewpass from "./modalNewPassword";
 import { actionCodigo } from "../../redux/actions/login/login";
 import { useDispatch } from "react-redux";
-import logo from "../../assets/img/logo.jpg";
+import logo from "../../assets/img/logo.png";
 
 function Home({ show, setShow, clave }) {
   const handleClose = () => setShow(false);

@@ -32,9 +32,8 @@ const PatientRecords = ({ data }) => {
     <div className="site-card-wrapper">
       <RecordsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} detailID={detailID} />
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-        {
-          (typeof data !== "undefined" && data.length > 0) &&
-          data.map((record, index) => (
+      {
+          Array.isArray(data) && data.map((record, index) => (
           
             <Col xs={24} sm={12} md={8} lg={6}>
             

@@ -5,7 +5,10 @@ import logo from "./../../assets/img/logo.png";
 import  { NotificationPlacement } from 'antd/es/notification/interface';
 import Toast from "../../components/toasts/toast.jsx";
 import backgroundImage from "../../assets/img/backgroundPatients.jpg";
-import img1  from  "./../../assets/diseases/mild_nonproliferative_retinopathy/4_right.jpg"
+import {imagesMPR} from "./utils/imagesMPR.js"
+import {imagesCataract} from "./utils/imagesCataract.js"
+import {imagesMiopy} from "./utils/imagesMiopy.js"
+import {imagesWet} from "./utils/imagesWet.js"
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
@@ -15,7 +18,7 @@ import {
   SyncOutlined,
   RadiusBottomrightOutlined,
 } from "@ant-design/icons";
-import { message, Upload, Button, Steps, Modal, Card, Space, notification } from "antd";
+import { message, Upload, Button, Steps, Modal, Card, Space, notification,Image } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Form } from "react-bootstrap";
 import { useDispatch, connect } from "react-redux";
@@ -24,8 +27,9 @@ import Carousel from 'react-bootstrap/Carousel';
 const Context = React.createContext({ name: 'Default' });
 
 
+
 function ImageComponent({ imagePath }) {
-  return <img src={imagePath} alt="Slide" style={{ width: '100%' }} />;
+  return <img src={imagePath} alt="Slide" style={{ width:400, height:400 }} />;
 }
 function Home({}) {
   const [msg, setMsg] = useState("");
@@ -43,9 +47,10 @@ function Home({}) {
   const [visible, setVisible] = useState(false);
   const [visibleInfo, setVisibleInfo] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [titleModalnfo,setTitleModalInfo] = useState("")
+  const [referenceModal,setReferenceModal] = useState("")
   const [descriptionModalInfo,setDescriptionModalInfo] = useState("")
   const [index, setIndex] = useState(0);
+
 
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -69,7 +74,7 @@ function Home({}) {
  
 
   const contextValue = useMemo(() => ({  }), []);
-
+ 
   useEffect(() => {
     if (fileList.length > 0) {
       setCurrentStep(1);
@@ -107,7 +112,7 @@ function Home({}) {
   };
   const showModalInfo = (value) =>{
     setDescriptionModalInfo(imagesList[indexImageList]["description"])
-    setTitleModalInfo(imagesList[indexImageList]["reference"])
+    setReferenceModal(imagesList[indexImageList]["reference"])
 
     setVisibleInfo(value)
   }
@@ -209,9 +214,7 @@ function Home({}) {
           </div>
         </div>
       </div>
-      <Button type="primary" onClick={showModal}>
-        Ver Imágenes
-      </Button>
+      
 
       {/* Estilos adicionales */}
       <style jsx>
@@ -253,46 +256,86 @@ function Home({}) {
       bodyStyle={{
         overflowY: "auto",
       
-        minHeight: "calc(80vh - 120px)",
+        minHeight: "calc(100vh - 120px)",
         borderTop: "#333 solid 1px",
       }}
+      onCancel={() => setVisibleInfo(false)}
       footer={null}
-      style={{  top: 10, position: "fixed", left: 0, right: 0 }}
+      style={{  top: 10, position: "fixed", left: 0, right: 0,border:"#333 solid 1px" }}
   title={
-    <h5>{disease}</h5>
+    <div className="d-flex align-items-center">
+        <img className="marginr-2 marginb-1" width={30} src={logo} alt="" />
+        <h5>Info</h5>
+      </div>
+
   }
 
-  visible={true}
+  visible={visibleInfo}
 
   wrapClassName="dark-modal"
 
 >
       
-        <>
-        <Carousel activeIndex={index} onSelect={handleSelect}>
-      <Carousel.Item>
-  
-    
-    <div className="d-flex justify-content-center">
-    <img alt="" width={400} height={400} src={img1}/>
+<>
+  <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 140px)" }}>
+    <div className="carousel-container-with-text">
+      <Carousel activeIndex={index} onSelect={handleSelect} interval={null} indicators={false}>
+        {imagesMPR.map((imagePath, idx) => (
+          <Carousel.Item key={idx}>
+            <div className="d-flex justify-content-center align-items-center carousel-item-container">
+              <img alt={`Slide ${idx}`} width={400} height={400} src={imagePath}/>
+            </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
     </div>
-      </Carousel.Item>
-      <Carousel.Item>
-        <ImageComponent src={img1} />
-      </Carousel.Item>
-      <Carousel.Item>
-        <ImageComponent imagePath="./../../assets/diseases/mild_nonproliferative_retinopathy/19_left.jpg" />
-      </Carousel.Item>
-      <Carousel.Item>
-        <ImageComponent imagePath="./../../assets/diseases/mild_nonproliferative_retinopathy/49_left.jpg" />
-      </Carousel.Item>
-      <Carousel.Item>
-        <ImageComponent imagePath="./../../assets/diseases/mild_nonproliferative_retinopathy/86_left.jpg" />
-      </Carousel.Item>
-    </Carousel>
-    <h6 className="text-white">{descriptionModalInfo}</h6>
-        </>
+    <div className="text-container w-100" style={{height: '300px',display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+<div>
+<h3 className="text-white marginb-2"  style={{width:"500px"}}>{disease}</h3>
+<h5 className="text-white marginb-2" style={{width:"500px"}}>{descriptionModalInfo}</h5>
+  </div>
+ <div>
+  <h6 className="text-white marginb-1 margint-4">References:</h6>
+ <a className="text-white" href={referenceModal} target="_blank" rel="noopener noreferrer">{referenceModal}</a>
+ </div>
+</div>
+
+  </div>
+
+  <style jsx>
+  {`
+    .carousel-container-with-text {
+      width: 100%; /* Ajusta esto según tus necesidades */
+      max-width: 500px; /* Ajusta esto según tus necesidades */
+      position: relative; /* Necesario para el posicionamiento de las flechas */
+    }
+
+    .carousel-item-container {
+      height: 500px; /* Asegúrate de que todas las diapositivas tengan la misma altura */
+    }
+
+    .text-container {
+      padding-left: 20px; /* Ajusta el espaciado según tus necesidades */
+      max-width: 300px; /* Ajusta esto según tus necesidades */
+    }
+
+    .carousel-container-with-text .carousel-control-prev,
+    .carousel-container-with-text .carousel-control-next {
+      visibility: hidden;
+    }
+
+    .carousel-container-with-text:hover .carousel-control-prev,
+    .carousel-container-with-text:hover .carousel-control-next {
+      visibility: visible;
+    }
+  `}
+  </style>
+</>
+
       </Modal>
+
+      
+
       <Modal
   title={
     <div className="d-flex justify-content-between align-items-center" style={{height:"50px"}}>
@@ -300,16 +343,14 @@ function Home({}) {
         <img className="marginr-2 marginb-1" width={30} src={logo} alt="" />
         <h5>Resultados</h5>
       </div>
-      <div>
-      <Button className="custom-button-secondary marginr-1 " onClick={() => closeModal()} style={{width:"145px"}}><i className="fas fa-close marginr-1" style={{fontSize:"12px"}}></i>Salir</Button>
-      <Button className="custom-button" style={{width:"145px"}}><i className="fas fa-save marginr-1" style={{fontSize:"12px"}}></i>Guardar</Button>
-      </div>
+      
     </div>
   }
+  
   closable={false}
   visible={visible}
-  className="dark-moda"
-  wrapClassName="dark-modal"
+  className="dark-modal dark-modal-result"
+  wrapClassName="dark-modal dark-modal-result"
   width={"100vw"}
   bodyStyle={{
     overflowY: "auto",
@@ -369,15 +410,24 @@ function Home({}) {
           {/* Contenedor para mostrar la imagen seleccionada en grande */}
           <div style={{ flex: "60%", textAlign: "center" }} className="p-2 d-flex align-items-center justify-content-center">
             {selectedImage && (
-              <img
-                src={selectedImage}
-                alt="selected large"
+              <Card
+              hoverable
+
+              style={{ background:"#000",border:"none",width: '100%', padding: 10, margin: 10 }}
+              cover={
+                <Image
                 style={{
                   maxHeight: "calc(100vh - 80px)",
                   maxWidth: "95%",
-                  opacity: "0.8",
+                
                 }}
-              />
+                  src={selectedImage} 
+                />
+              }
+            >
+          
+            </Card>
+              
             )}
          
           </div>
@@ -425,7 +475,7 @@ function Home({}) {
                   borderRadius: "10px",
 
                   marginTop: 10,
-                  width: "180px",
+                  width: "100%",
                 }}
               >
                 <Form.Select
@@ -437,10 +487,12 @@ function Home({}) {
                 >
                   <option value="original">Original</option>
                   <option value="vessels">Vessels</option>
+                  <option value="disc_optic">Disc Optic</option>
+                  <option value="microaneurism">Microaneurism</option>
                 </Form.Select>
               </div>
               <div className="marginl-1 margint-1">
-              <Button className="custom-button"><i className="fas fa-expand marginr-1" style={{fontSize:"12px"}}></i>Expandir</Button>
+
               </div>
             </div>
             </div>
