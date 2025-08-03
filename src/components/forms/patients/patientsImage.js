@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Image, Button } from 'antd';
 
 const ImageUpload = ({setImageUrl,id}) => {
-  const [image, setImage] = useState(`http://${window.location.hostname}:8000/media/patients/${id}.jpg?${Date.now()}`);
+  const [image, setImage] = useState(id !== -1 ? `http://${window.location.hostname}:8000/media/patients/${id}.jpg?${Date.now()}`:"");
   
   const inputRef = useRef();
 

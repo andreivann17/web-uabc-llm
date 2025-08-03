@@ -11,15 +11,26 @@ import SelectDates from "../../components/utils/selectDates.js"
 import DetectionChart from "../../components/cards/statistics/CardPatient.js";
 import CardGender from "../../components/cards/statistics/CardGender.js";
 import CardMap from "../../components/cards/statistics/CardMap.js";
-import DaysChart from "../../components/charts/chartDays.js"
+import DiaseaseChart from "../../components/charts/chartDiseases.js"
 import CompareChart from "../../components/charts/chartCompare.js"
 import CardBloodType from "../../components/cards/statistics/CardBloodType.js";
-const token = localStorage.getItem("tokends");
+import { useNavigate } from "react-router-dom";
+
 function Home({cardBloodType}) {
- 
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
+  const navegate = useNavigate();
+  const expandOnClickDiseases = () =>{
+    
+  }
   useEffect(() => {
     //dispatch(actionStatisticsGet())
   }, []);
+  useEffect(() => {
+    console.log(token)
+    if (token == null) {
+      navegate("/login");
+    }
+  }, [token]);
   return (
     <>
       {token != null && (
@@ -54,11 +65,22 @@ function Home({cardBloodType}) {
             alignItems: "stretch",
           }}
           >
-                 
-          <DaysChart />
-          <div className="shadow" style={{  marginLeft: 15, marginTop: 35, width: "40%" }}>
-      <CompareChart />
+             <div className="shadow margint-3" style={{ width: "100%" }}>
+                  <Card
+                    title={
+                      <div className="d-flex justify-content-between">
+                        <div>Diseases Detections</div>
+                        <div>
+        <Button onClick={() => expandOnClickDiseases()}><i className="fas fa-expand"></i></Button>
       </div>
+                      </div>
+                    }
+                  >
+                        <DiaseaseChart />
+                  </Card>
+                </div>    
+     
+          
           </div>
             </div>
           </div>

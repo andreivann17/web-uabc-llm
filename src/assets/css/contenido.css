@@ -7,8 +7,16 @@
   font-family: varelaround;
   src: url( ../fonts/Asap-Regular.ttf);
 }
+@font-face {
+  font-family: minionpro;
+  src: url( ../fonts/MinionPro-Regular.otf);
+}
+@font-face {
+  font-family: proximanova;
+  src: url( ../fonts/proxima-nova.otf);
+}
 *{
-  font-family: varelaround;
+  font-family: proximanova;
 }
 .Panel_Contenido{
   transition-timing-function: linear;

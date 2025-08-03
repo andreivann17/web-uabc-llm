@@ -3,7 +3,8 @@ import Header from "../../components/navigation/header";
 import Contenido from "../../components/navigation/content";
 import {actionMeses} from "../../redux/actions/utils/utils"
 import { actionRecordsGet } from "../../../src/redux/actions/records/records";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import SelectDates from "../../components/utils/selectDates.js"
 import { useDispatch,connect } from "react-redux";
 import CardRecords from "../../components/cards/cardRecords"
 import {
@@ -16,6 +17,7 @@ import {
   endOfYear,
   subDays,
 } from "date-fns";
+
 import {
 
   Dropdown,
@@ -25,17 +27,19 @@ import {
   DatePicker,
 } from "antd";
 import backgroundImage from "../../assets/img/BackgroundRecords.jpg"
-const token = localStorage.getItem("tokends");
+
 const { RangePicker } = DatePicker;
 const currentDate = new Date();
 function Home({meses,fechas,data,dataRecords}) {
   let {id} = useParams()
   const dispatch = useDispatch();
+  const navegate = useNavigate();
   const [isCustomDrawerOpen, setIsCustomDrawerOpen] = useState(false);
   const [customRange, setCustomRange] = useState([]);
   const [titleDate, setTitleDate] = useState(format(currentDate, 'MMM dd, yyyy'));
   const [selectedRange, setSelectedRange] = useState([]);
   const [selectValue, setSelectValue] = useState("thisMonth");
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
   
   const options = [
     "thisYear",
@@ -173,6 +177,12 @@ function Home({meses,fechas,data,dataRecords}) {
   useEffect(() => {
     dispatch(actionMeses(id))
   }, []);
+  useEffect(() => {
+    console.log(token)
+    if (token == null) {
+      navegate("/login");
+    }
+  }, [token]);
   return (
     <>
       {token != null && (
@@ -198,20 +208,7 @@ function Home({meses,fechas,data,dataRecords}) {
           <div className="Panel_Contenido  marginb-5">
             
             <div className="mt-3">
-            <div className="marginb-2  d-flex justify-content-end align-items-center">
-            <div className="marginr-2 mt-2">
-                <h5 className="text-success">{titleDate}</h5>
-              </div>
-              <div>
-              <Dropdown overlay={menu}>
-            <Button className="w-100">
-              <i className="fas fa-calendar marginr-1"></i> {selectValue}{" "}
-              <i className="fas fa-angle-down marginl-1"></i>
-            </Button>
-          </Dropdown>
-              </div>
-            
-          </div> 
+            <SelectDates action={actionRecordsGet}/>
           <div>
             <CardRecords data={dataRecords}/>
           </div>

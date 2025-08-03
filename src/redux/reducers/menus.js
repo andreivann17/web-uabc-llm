@@ -1,5 +1,5 @@
 // redux/reducers/index.js
-import prueba from "./../../assets/img/andre.jpg";
+import prueba from "./../../assets/img/logo.png";
 import { FETCH_PRIVILEGIOS_SUCCESS, FETCH_PRIVILEGIOS_FAILURE,FETCH_BOTONES_FAILURE,FETCH_BOTONES_SUCCESS,FETCH_INFOUSER_FAILURE,FETCH_INFOUSER_SUCCESS } from '../actions/menus/types';
 const initialState = {
   privilegios: [2,2,2,2,2,2],

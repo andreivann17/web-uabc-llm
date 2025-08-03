@@ -1,4 +1,4 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -11,24 +11,18 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {actionScroll} from "./redux/actions/utils/utils"
 import Menu from "./components/navigation/menus";
 import Login from "./containers/pages/login";
-import Profiles from "./containers/pages/profiles";
+import Signup from "./containers/pages/signup";
 import Home from "./containers/pages/home";
-import Consult from "./containers/pages/consult"
-import Patients from "./containers/pages/patients";
-import History from "./containers/pages/history";
-import Statistics from "./containers/pages/statistics";
-import Records from "./containers/pages/records";
+import Retina from "./containers/pages/retina";
 import NotFound from "./containers/errors/error404";
 import "./assets/css/bootstrap.css";
 import "./assets/css/administrador.css";
 import "./styles.css";
 import "./assets/css/styles.css";
-import "./assets/css/scroll.css";
 import "./assets/css/utils.css";
 import store from "./store";
 import { Provider, useDispatch } from "react-redux";
-import DiagnosisAi from "./containers/pages/diagnosisai";
-const token = localStorage.getItem("tokends");
+
 const routes = [
  
  
@@ -40,14 +34,15 @@ const routes = [
     nodeRef: createRef(),
     className: "Login",
   },
-  {
-    path: "/profiles",
-    value: "profiles-0",
-    name: "Profiles",
-    element: <Profiles />,
+   {
+    path: "/signup",
+    value: "signup-0",
+    name: "Signup",
+    element: <Signup />,
     nodeRef: createRef(),
-    className: "Profiles",
+    className: "Signup",
   },
+  
   {
     path: "/",
     value: "0-0",
@@ -56,56 +51,15 @@ const routes = [
     nodeRef: createRef(),
     className: "Home",
   },
- 
-  {
-    path: "/records",
-    value: "1-0",
-    name: "Records",
-    element: <Records />,
+    {
+    path: "/retina",
+    value: "0-0",
+    name: "Retina",
+    element: <Retina />,
     nodeRef: createRef(),
-    className: "Records",
+    className: "Retina",
   },
-  
-  {
-    path: "/patient",
-    value: "1-1",
-    name: "Patients",
-    element: <Patients />,
-    nodeRef: createRef(),
-    className: "Patients",
-  },
-  {
-    path: "/history",
-    value: "1-1",
-    name: "History",
-    element: <History />,
-    nodeRef: createRef(),
-    className: "History",
-  },
-  {
-    path: "/statistics",
-    value: "1-0",
-    name: "Statistics",
-    element: <Statistics />,
-    nodeRef: createRef(),
-    className: "Statistics",
-  },
-  {
-    path: "/diagnosis",
-    value: "1-0",
-    name: "Diagnosisai",
-    element: <DiagnosisAi />,
-    nodeRef: createRef(),
-    className: "Diagnosisai",
-  },
-  {
-    path: "/consult",
-    value: "1-0",
-    name: "Consult",
-    element: <Consult />,
-    nodeRef: createRef(),
-    className: "Consult",
-  },
+   
   {
     path: "*",
     value: "NotFound",
@@ -114,6 +68,7 @@ const routes = [
     nodeRef: createRef(),
     className: "NotFound",
   },
+  
 ];
 const router = createBrowserRouter([
   {
@@ -134,11 +89,8 @@ function Example() {
   const currentOutlet = useOutlet();
   const pathname = location.pathname;
   const normalpath = pathname.replace(/\/+$/, "");
-  if (token == null) {
-    if (normalpath != "/login") {
-      navegate("/login");
-    }
-  }
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
+
 
 
 let routecorrect = null;
@@ -169,21 +121,17 @@ if (id) {
 
   }
   const routeclass = routecorrect?.value || "unknown";
+
+
   const { nodeRef } =
     routes.find((route) => route.path === location.pathname) ?? {};
+  console.log(normalpath)
   
   return (
     <>
-    {
-     ( normalpath !== "/login" &&  normalpath !== "/profiles") &&
-
-     <Menu
    
-          valuenav={routeclass.split("-")[0]}
-          subvalue={routeclass.split("-")[1]}
-        ></Menu>
-      }
-<div onScroll={(evt) => onScroll(evt)} onContextMenu={handleRightClick} className={(normalpath === "/login" || normalpath ==="/profiles") ? "" : "div_contentmaster"}>
+       
+<div style={{background:"#f6f7fb"}} onScroll={(evt) => onScroll(evt)} onContextMenu={handleRightClick}>
         <div>
           <SwitchTransition>
             <CSSTransition

@@ -1,6 +1,6 @@
 import "../../assets/css/contenido.css";
 import {Button,Card} from "react-bootstrap/";
-
+import FloatButton from "../../components/utils/floatButton"
 function Content({icon,title,backgroundImage }) {
   const cardStyle = {
     backgroundImage: `url(${backgroundImage})`,
@@ -26,7 +26,7 @@ function Content({icon,title,backgroundImage }) {
   return (
     
   <>
-   
+     <FloatButton />
   <div >
     <Card style={cardStyle} className="border-0">
     <div style={backgroundStyle}></div>

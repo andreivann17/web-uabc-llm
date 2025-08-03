@@ -12,7 +12,7 @@ function toast({show,setShow,msg}) {
           style={{width:"20px"}}
           alt=""
         />
-        <strong className="me-auto">Osmed RRHH</strong>
+        <strong className="me-auto">UABC Retina</strong>
    
       </Toast.Header>
       <Toast.Body>{msg}</Toast.Body>

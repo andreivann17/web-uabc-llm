@@ -27,7 +27,7 @@ function CardGender({ cardGender }) {
       </div>
       </div>
     }>
-      <div className="p-2" style={{ width: "100%", height: 500 }}>
+      <div className="p-2" style={{ width: "100%", height: 500, overflowX:"auto" }}>
       <ChartMapMexico  />
       </div>
     </Card>

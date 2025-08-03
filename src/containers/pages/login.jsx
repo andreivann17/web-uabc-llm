@@ -1,124 +1,132 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Modal, notification, Button } from "antd";
+import { notification, Button, Spin } from "antd";
 import logo from "../../assets/img/logo.png";
 import { actionLogin } from "../../redux/actions/login/login";
 import { Form, FloatingLabel } from 'react-bootstrap';
-import '../../assets/css/login.css';
-import ModalOlvidar from "../../components/modals/modalOlvidarPassword"
+import ModalOlvidar from "../../components/modals/modalOlvidarPassword";
+import "../../assets/css/loginVoyager.css";
 
-function Home({}) {
+function Login() {
   const navigate = useNavigate();
-  const [show, setShow] = useState(false);
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const location = useLocation();
   const dispatch = useDispatch();
   const passwordInput = useRef(null);
 
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const openNotification = (msg) => {
-    notification.open({
+    notification.error({
       message: "Error",
       description: msg,
-      icon: <img src={logo} alt="Logo" style={{ width: '32px', height: '40px'}} />,
     });
   };
 
   const checkFields = () => {
-    if (username.trim().length === 0 || password.trim().length === 0) {
-      openNotification("You can't leave fields empty");
+    if (email.trim().length === 0 || password.trim().length === 0) {
+openNotification("Please complete all fields correctly.");
       return false;
     }
     return true;
   };
 
-  const callback = (value) => {
-    if (value.status) {
-      localStorage.setItem("tokends", value.value);
-      navigate("/patient");
-      return;
-    }
-    openNotification("Username or password don't match");
+  const callback = (token) => {
+    localStorage.setItem("value-user", token);
+    navigate("/retina");
   };
 
   const callbackError = (value) => {
+    setLoading(false);
     openNotification(value);
   };
 
   const acceptButtonHandler = () => {
-    if (checkFields() === false) {
-      return;
-    }
-    var params = {
-      username: username,
-      password: password,
-    };
-  
-    dispatch(actionLogin(params, callback, callbackError));
+    if (!checkFields()) return;
+    setLoading(true);
+    const parametros = { email, password };
+    dispatch(actionLogin(parametros, callback, callbackError));
   };
 
-  const handleKeyDownUsername = (event) => {
-    if (event.key === 'Enter') {
+  const handleKeyDownemail = (event) => {
+    if (event.key === "Enter") {
       event.preventDefault();
-      passwordInput.current.focus();
+      passwordInput.current?.focus();
     }
-  }
+  };
 
   const handleKeyDownPassword = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault();
       acceptButtonHandler();
     }
-  }
+  };
 
   return (
-    <div className="home-container">
-      <ModalOlvidar show={show} setShow={setShow} />
+    <div className="login-wrapper fade-in">
       <div className="login-container">
-        <div className="header">
-          <img className="logo" src={logo} alt="Logo" />
-          <h4 className="mt-2">Login</h4>
-        </div>
-        <form className="login-form" noValidate autoComplete="off">
-          <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
-            <Form.Control 
-              onChange={(e) => setUserName(e.target.value)} 
-              type="text" 
-              placeholder="name@example.com" 
-              onKeyDown={handleKeyDownUsername}
-            />
-          </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password">
-            <Form.Control 
-              onChange={(e) => setPassword(e.target.value)} 
-              type="password" 
-              placeholder="Password" 
-              ref={passwordInput}
-              onKeyDown={handleKeyDownPassword}
-            />
-          </FloatingLabel>
+        <div className="login-left">
+          <div className="text-center">
+            <img src={logo} alt="UABC logo" style={{ width: 120 }} />
+           <h2 className="login-title">Login</h2>
+<p className="login-subtitle">Retina Analysis System - UABC</p>
 
-          <Button
-            type="primary"
-            block
-            className="mt-3 custom-button"
-            onClick={() => acceptButtonHandler()}
-          >
-            Accept 
-          </Button>
-
-          <div className="forgot-password-link">
-            <h6
-              className="link-success link-pointer"
-              onClick={() => setShow(true)}
-            >
-              Forgot your password?
-            </h6>
           </div>
-        </form>
+
+          <form className="login-form" noValidate autoComplete="off">
+  <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+    <Form.Control
+      onChange={(e) => setEmail(e.target.value)}
+      type="email"
+      placeholder="user@uabc.edu.mx"
+      onKeyDown={handleKeyDownemail}
+      aria-label="Email"
+    />
+  </FloatingLabel>
+
+  <FloatingLabel controlId="floatingPassword" label="Password">
+    <Form.Control
+      onChange={(e) => setPassword(e.target.value)}
+      type="password"
+      placeholder="Password"
+      ref={passwordInput}
+      onKeyDown={handleKeyDownPassword}
+      aria-label="Password"
+    />
+  </FloatingLabel>
+
+  <Button
+    type="primary"
+    block
+    className="custom-button mt-3"
+    onClick={acceptButtonHandler}
+    disabled={loading}
+  >
+    {loading ? <Spin size="small" /> : "Log In"}
+  </Button>
+
+  <div className="forgot-password-link">
+    <span className="link-pointer" onClick={() => setShow(true)}>
+      Forgot your password?
+    </span>
+  </div>
+</form>
+
+
+          <footer className="login-footer">
+            © 2025 Universidad Autónoma de Baja California
+          </footer>
+        </div>
+
+        <div className="login-right" role="presentation" />
       </div>
+
+      <ModalOlvidar show={show} setShow={setShow} />
     </div>
   );
 }
 
-export default Home;
+export default Login;

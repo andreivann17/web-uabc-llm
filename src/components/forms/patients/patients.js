@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Form } from "react-bootstrap/";
 import {Select, DatePicker  } from "antd"; 
 import { connect } from "react-redux";
-import dataCountries from "../../utils/countries+states+cities.json"
-console.log(dataCountries)
+import statesAndCities  from "../../utils/estados-municipios.json"
+import moment from 'moment';
 const { Option } = Select;
 function Patients({
   data,
@@ -12,7 +12,7 @@ function Patients({
   all_genders,
   all_blood_types
 }) {
-  const [dataStates,setDataStates] = useState([])
+  const [dataStates,setDataStates] = useState(Object.keys(statesAndCities))
   const [dataCities,setDataCities] = useState([])
   const onStateData = (value, key) => {
     
@@ -26,17 +26,30 @@ function Patients({
     console.log(dateString)
     onStateData(dateString,"birth_date")
   };
-  const onChangeCountry = (value) =>{
-    const dataStates = dataCountries.find(row => row.id ===value);
-    onStateData(value, "country")
-    console.log(dataStates["states"])
-    setDataStates(dataStates["states"])
-  }
-  const onChangeState = (value) =>{
-    const dataCities = dataStates.find(row => row.id ===value);
-    onStateData(value, "state")
-    setDataCities(dataCities["cities"])
-  }
+
+ const onChangeState = (value) => {
+  const cities = statesAndCities[value] || []; // Get cities for the selected state
+  setDataCities(cities); // Update cities dropdown
+  onStateData(value, "state"); // Update state in data
+
+  // Set the city to the first city in the new state or an empty string if there are no cities
+  const firstCity = cities.length > 0 ? cities[0] : "";
+  onStateData(firstCity, "city"); // Update city in data
+};
+
+  useEffect(() => {
+    // If a state is already selected (in case of edit), load its cities
+    if (data.state) {
+      const cities = statesAndCities[data.state];
+
+      setDataCities(cities || []);
+
+    }
+  }, [data.state]); // This effect runs when 'data.state' changes
+
+  const onChangeCity = (value) => {
+    onStateData(value, "city"); // Update city in data
+  };
   return (
     <>
       <Row className="marginb-3">
@@ -72,7 +85,7 @@ function Patients({
             className="text-errorform text-danger"
             style={{ display: validated.last_name }}
           >
-            Ingrese correctamente el precio
+            Ingrese correctamente el apellido
           </h6>
         </Form.Group>
         <Form.Group as={Col} md="4">
@@ -134,83 +147,46 @@ function Patients({
          
         </Form.Group>
         <Form.Group as={Col} md="4">
-          <Form.Label>Birthdate</Form.Label>
-         
-          <DatePicker 
-  style={{width:"100%"}}  
-
-  onChange={onChangeDatePicker} 
-/>
-
-        </Form.Group>
+  <Form.Label>Birthdate</Form.Label>
+  <Form.Control
+    type="date"
+    value={data.birth_date} // Ensure this is in 'YYYY-MM-DD' format
+    onChange={(ev) => onStateData(ev.target.value, "birth_date")}
+    style={{ width: "100%" }}
+  />
+</Form.Group>
 
       </Row>
       <Row className="mb-3 ">
-      
       <Form.Group as={Col} md="4">
-          <Form.Label>Country</Form.Label>
-          <Select
-          defaultValue={"Select the option"}
-                  value={data.country}
-                  style={{width:"100%"}}
-                 
-                  onChange={(value) => onChangeCountry(value)}
-                >
-                      {
-              dataCountries.map(
-                (item) =>
-                <Option key={item.id} value={item.id} selected={item.id == data.country}>
-                {item.name}
-              </Option>
-              )}
-                
-                </Select>
-      
-        </Form.Group>
-        <Form.Group as={Col} md="4">
-          <Form.Label>State</Form.Label>
-          <Select
-          defaultValue={"Select the option"}
-                  value={data.state}
-                  style={{width:"100%"}}
-                 
-                  onChange={(value) => onChangeState(value)}
-                >
-                      {
-                        dataStates.length>0&&
-              dataStates.map(
-                (item) =>
-                <Option key={item.id} value={item.id} selected={item.id == data.state}>
-                {item.name}
-              </Option>
-              )}
-                
-                </Select>
-
-         
-        </Form.Group>
-        <Form.Group as={Col} md="4">
-          <Form.Label>City</Form.Label>
-          <Select
-          defaultValue={"Select the option"}
-                  value={data.city}
-                  style={{width:"100%"}}
-                 
-                  onChange={(value) => onChangeState(value)}
-                >
-                      {
-                        dataCities.length>0&&
-                        dataCities.map(
-                (item) =>
-                <Option key={item.id} value={item.id} selected={item.id == data.city}>
-                {item.name}
-              </Option>
-              )}
-                
-                </Select>
-
-         
-        </Form.Group>
+    <Form.Label>State</Form.Label>
+    <Select
+      value={data.state}
+      style={{ width: "100%" }}
+      onChange={onChangeState}
+    >
+      {dataStates.map((state) => (
+        <Option key={state} value={state} selected={state === data.state}>
+          {state}
+        </Option>
+      ))}
+    </Select>
+  </Form.Group>
+  <Form.Group as={Col} md="4">
+    <Form.Label>City</Form.Label>
+    <Select
+      value={data.city}
+      style={{ width: "100%" }}
+      onChange={onChangeCity}
+    >
+      {dataCities.length > 0 &&
+        dataCities.map((city) => (
+          <Option key={city} value={city} selected={city === data.city}>
+            {city}
+          </Option>
+        ))}
+    </Select>
+  </Form.Group>
 
       </Row>
     </>

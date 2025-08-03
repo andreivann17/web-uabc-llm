@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import { Card, Col, Row, Image, Dropdown, Menu, Button, Modal } from 'antd';
 import { connect } from "react-redux";
 import "../../assets/css/cards.css";
-import RecordsModal from "../modals/records/recordsDetails";
+import RecordsModal from "../modals/monitor/modaldetailspatient";
 
 const { Meta } = Card;
 
 const PatientRecords = ({ data }) => {
-  console.log(data)
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailID, setDetailID] = useState("-1");
-
+  const [diseaseInfo,setDiseaseInfo] = useState([])
+  const [patientInfo,setPatientInfo] = useState([])
   const formatTitleDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
-  const openModal = (id) => {
-    setDetailID(id);
+  const openModal = (index) => {
+    setDiseaseInfo(data[index].diseases)
+    setPatientInfo([data[index].patient_name,data[index].datetime,data[index].id])
     setIsModalOpen(true);
+
   };
 
   const menu = (
@@ -30,7 +31,11 @@ const PatientRecords = ({ data }) => {
 
   return (
     <div className="site-card-wrapper">
-      <RecordsModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} detailID={detailID} />
+          {
+      (typeof  data !="undefined"  && data.length >0 )&&
+    
+      <RecordsModal isConfirmedActive={false} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataPatient={patientInfo} dataDisease={diseaseInfo}  />
+          }
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
       {
           Array.isArray(data) && data.map((record, index) => (
@@ -45,16 +50,14 @@ const PatientRecords = ({ data }) => {
                     height={200}
                     width={"100%"}
                     alt="example"
-                    src={`http://${window.location.hostname}:8000${record.detection_img}`} 
+                    src={`http://${window.location.hostname}:8000${record.diseases[0].detection_img}`} 
                   />
                 }
               >
-                <Meta title={formatTitleDate(record.datetime)} description={"Diagnosis: " + ((record.diseases && record.diseases.length > 0 && record.diseases[0].disease_name) ? <p  className='inlineblock marginl-1 text-danger ' >Positive</p> : "Negative")} />
+                <Meta title={formatTitleDate(record.datetime)}  />
                 
                 <div className='margint-2 d-flex justify-content-end'>
-                  <Dropdown className='marginr-1 border-0' overlay={menu}>
-                    <Button shape="circle" icon={<i className="fa-solid fa-ellipsis"></i>}/>
-                  </Dropdown>
+             
                   <Button onClick={() => openModal(index)} className='custom-button' type="primary"><i className='fas fa-file marginr-1'></i>Details</Button>
                 </div>
               </Card>

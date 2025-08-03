@@ -4,14 +4,23 @@ import Contenido from "../../components/navigation/content.jsx";
 import { useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
 import HistoryTable from "../../components/tables/historyTable.js"
+import { useNavigate } from "react-router-dom";
 
-const token = localStorage.getItem("tokends");
+
 function Home({}) {
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
+  const navegate = useNavigate();
 
 
   useEffect(() => {
     // dispatch(actionDivisas())
   }, []);
+  useEffect(() => {
+    console.log(token)
+    if (token == null) {
+      navegate("/login");
+    }
+  }, [token]);
   return (
     <>
       {token != null && (

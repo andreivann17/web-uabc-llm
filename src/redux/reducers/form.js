@@ -1,5 +1,5 @@
 // redux/reducers/index.js
-import prueba from "./../../assets/img/andre.jpg";
+import prueba from "./../../assets/img/logo.png";
 import { FETCH_FORM_SUCCESS, FETCH_FORM_FAILURE } from '../actions/form/types';
 const initialState = {
   data: {},

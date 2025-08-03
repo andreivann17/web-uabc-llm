@@ -64,13 +64,7 @@ const CardInfo = ({ data, setIsModalEditOpen }) => {
             >
               <i className="fas fa-edit marginr-1"></i>Edit
             </Button>
-            <Space wrap>
-              <Dropdown overlay={menu}>
-                <Button className="custom-button" type="primary">
-                  <i className="fas fa-file marginr-1"></i>Export
-                </Button>
-              </Dropdown>
-            </Space>
+           
           </div>
         </div>
         <div className="row">

@@ -1,0 +1,52 @@
+[
+  {
+    "context": "La imagen del fondo de ojo muestra signos de retinopatía diabética, clasificada como no proliferativa moderada. Se detectaron biomarcadores como múltiples microaneurismas, varias hemorragias retinianas y agrupaciones de exudados duros cerca de la región macular. No se observaron signos de neovascularización ni exudados blandos.",
+    "question": "¿Esta es la etapa más grave de la retinopatía diabética?",
+    "answer": "No, esta es una etapa moderada. Significa que hay daño, pero aún no ha llegado a la fase proliferativa, que es más grave. Un tratamiento temprano y el control adecuado pueden ayudar a frenar la progresión."
+  },
+  {
+    "context": "...",
+    "question": "¿Qué son esos microaneurismas? ¿Son peligrosos?",
+    "answer": "Los microaneurismas son pequeñas dilataciones en los vasos sanguíneos de la retina. Son un signo temprano de daño, pero no son peligrosos de inmediato. Se vigilan de cerca para evitar que empeoren."
+  },
+  {
+    "context": "...",
+    "question": "Dijiste que hay hemorragias. ¿Eso significa que estoy sangrando dentro del ojo?",
+    "answer": "Sí, pero son pequeñas hemorragias retinianas. Son internas y no visibles desde el exterior. Aunque son preocupantes, son comunes en etapas moderadas y pueden manejarse con el cuidado adecuado."
+  },
+  {
+    "context": "...",
+    "question": "¿Y qué pasa con los exudados duros? ¿Son permanentes?",
+    "answer": "Los exudados duros son depósitos que provienen de vasos con filtraciones. A veces pueden desaparecer si se trata la causa subyacente, como el azúcar alta. Pero si permanecen cerca de la mácula, podrían afectar la visión."
+  },
+  {
+    "context": "...",
+    "question": "Entonces no tengo exudados blandos, ¿eso es buena señal?",
+    "answer": "Sí, los exudados blandos suelen indicar un daño más avanzado. No tenerlos sugiere que tu retina aún no ha alcanzado una etapa más grave."
+  },
+  {
+    "context": "...",
+    "question": "¿No proliferativa moderada significa que me voy a quedar ciego?",
+    "answer": "No necesariamente. Muchos pacientes viven con esta etapa durante años sin perder la visión, especialmente si controlan su azúcar en sangre y se hacen exámenes oculares regularmente."
+  },
+  {
+    "context": "...",
+    "question": "¿Cómo se diferencia esto de la etapa leve? Yo me siento bien.",
+    "answer": "La etapa leve suele presentar solo microaneurismas. En tu caso, hay signos adicionales como hemorragias y exudados, lo que indica que la enfermedad está progresando. Puede que no lo sientas, pero tu retina está bajo estrés."
+  },
+  {
+    "context": "...",
+    "question": "¿Por qué ocurre alrededor de la mácula? ¿No es esa la parte central de la visión?",
+    "answer": "Exactamente. La mácula controla la visión central. Por eso prestamos especial atención a los cambios en esa zona, ya que pueden afectar actividades como leer o reconocer rostros."
+  },
+  {
+    "context": "...",
+    "question": "Si ya tengo esto, ¿por qué no me lo dijeron antes?",
+    "answer": "La retinopatía diabética suele desarrollarse silenciosamente. Es posible que no notes síntomas hasta que el daño sea significativo. Por eso son esenciales los chequeos regulares."
+  },
+  {
+    "context": "...",
+    "question": "¿Esto se puede revertir por completo?",
+    "answer": "Algunos cambios pueden estabilizarse o incluso mejorar ligeramente, pero la reversión es limitada. El objetivo es prevenir más daño mediante control adecuado y tratamiento oportuno."
+  }
+]

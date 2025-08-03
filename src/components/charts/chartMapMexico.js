@@ -1,7 +1,8 @@
 import React from 'react';
 import Chart from 'react-google-charts';
-
-const GeoChartComponent = () => {
+import { useDispatch, connect } from "react-redux";
+const GeoChartComponent = (dataState) => {
+  console.log(dataState)
    var data = [
           ['State', 'Accent'],
           ['Baja California', 100],
@@ -42,7 +43,7 @@ const GeoChartComponent = () => {
     region: 'MX', // Mexico
     resolution: 'provinces',
     colorAxis: {
-      values: [100, 200, 300, 400],
+      values: [4, 8, 12, 16],
       colors: ['green', 'yellow', 'orange', 'red']
     },
     backgroundColor: '#81d4fa',
@@ -56,10 +57,14 @@ const GeoChartComponent = () => {
       width="640px"
       height="400px"
       
-      data={data}
+      data={dataState.dataState}
       options={options}
     />
   );
 };
 
-export default GeoChartComponent;
+const mapStateToProps = (state) => ({
+  dataState:state.statistics.data.states
+});
+
+export default connect(mapStateToProps)(GeoChartComponent);

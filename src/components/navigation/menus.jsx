@@ -5,11 +5,9 @@ import "./../../assets/css/fontawesome-free-6.1.0-web/css/all.css";
 import "./../../assets/css/fontawesome-free-6.1.0-web/css/all.min.css";
 import { useNavigate } from "react-router-dom";
 import logo from "./../../assets/img/logo.png";
-import img from "./../../assets/img/andre.jpg";
-import prueba from "./../../assets/img/andre.jpg";
 import { Collapse,OverlayTrigger,Popover } from "react-bootstrap/";
 import { connect } from "react-redux";
-const token = localStorage.getItem("tokends");
+
 const icons = ["fas fa-home", 'fas fa-hospital-user',"fas fa-eye","fas fa-user-doctor", 'fas fa-book', 'fas fa-chart-line', 'fas fa-user', 'fas fa-cogs']
 const botones = [
   [["Home", "/"], []],
@@ -22,7 +20,8 @@ const botones = [
   [["Settings", "/settings"],[]],
 ]
 
-function Nabvar({ valuenav, privilegios, infoUser }) {
+function Nabvar({ valuenav, privilegios, infoUser,dataLogin }) {
+  console.log(privilegios)
   console.log(valuenav)
   const navegate = useNavigate();
   const [activeButton, setActiveButton] = useState(0);
@@ -31,6 +30,7 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
   const [showPopover, setShowPopover] = useState(false);
   const buttonRef = useRef(null);
   const popoverRef = useRef(null);
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
 
   useEffect(() => {
     // Agregar controlador de eventos al documento para detectar clics fuera del popover y del botón
@@ -54,8 +54,14 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
   }, []);
   const handleButtonClick = () => {
     setShowPopover(!showPopover);
+  
   };
+  const log_out_click = () =>{
+    localStorage.removeItem("tokends");
+    console.log(localStorage.getItem("tokends")); 
+    navegate("/login");
 
+  }
   const onState = (pos, subpos, url) => {
 
     if (url === "-") {
@@ -80,13 +86,14 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
     <Popover id="popover-basic" ref={popoverRef} style={{minWidth:"350px"}}>
       <Popover.Header as="h3">
         <div className='w-100 d-flex justify-content-center '>
-          <div className="border-0 rounded-circle"  style={{ backgroundImage: "url("+img+")" }} id="boxing">
+          <div className="border-0 rounded-circle"  style={{ backgroundImage: "url(http://"+window.location.hostname+":8000"+dataLogin.path+")" }} id="boxing">
 
           </div>
         </div></Popover.Header>
       <Popover.Body>
-      <div className='w-100 d-flex justify-content-center margint-2 marginb-2'>
-          <h5>{"Andre Herrera"}</h5>
+      <div className='w-100  margint-2 marginb-2'>
+          <h5>{dataLogin.userName}</h5>
+          <h6>{dataLogin.email}</h6>
         </div>
 
         <div className="d-block  " >
@@ -94,20 +101,13 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
 
 
 
-          <div className="margint-2 mb-1 accesouser3-1" id="div_historialbtnadmin" >
-            <button onClick={() => onState(-1,-1,"/history")} className='btn btn-secondary   text-white form-control '>
-              History
-
-            </button>
-
-        </div>
-
+      
 
 
 
           <div className=" d-flex align-items-end" style={{height: "50px"}}>
 
-            <button onClick={() => onState(-1,-1,"/login")} className='btn btn-danger  text-white  form-control btn_salirsesion' >
+            <button onClick={() => log_out_click()} className='btn btn-danger  text-white  form-control btn_salirsesion' >
               Log out
             </button>
           </div>
@@ -118,24 +118,17 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
   useEffect(() => {
     setActiveButton(parseInt(valuenav));
   }, [valuenav]);
-  useEffect(() => {
-    //  dispatch(actionPrivilegios()) 
 
-  }, []);
-  useEffect(() => {
-    if (token == null) {
-      navegate("/login");
-    }
-  }, [token]);
+
 
   return (
     <>
 <div className=" div_izqarriba">
  <OverlayTrigger trigger="click" placement="left" overlay={popover}>
 <button ref={buttonRef} onClick={handleButtonClick} type="button" className="btn btn-gold  rounded-pill text-white btn_imgcuenta ">
-  <img className='imgcuenta rounded-circle' alt='' width='35' height='35' src={img}/>
+  <img className='imgcuenta rounded-circle' alt='' width='35' height='35' src={"http://"+window.location.hostname+":8000"+dataLogin.path+""}/>
 
-  <h6 className='col-8 text-truncate ' >{"Andre Herrera"} </h6>
+  <h6 className='col-8 text-truncate ' >{dataLogin.userName} </h6>
 
 
 
@@ -239,8 +232,9 @@ function Nabvar({ valuenav, privilegios, infoUser }) {
 
 const mapStateToProps = (state) => ({
   botones: state.menus.botones ?? [],
-  privilegios: state.menus.privilegios ?? [2, 2],
-  infoUser: state.menus.infoUser ?? { id: "0", nombre: "Andre Herrera", img: prueba }
+  dataLogin:state.login.login?? [],
+  privilegios: state.menus.privilegios ?? [2, 2,2,2,2,2,2,2],
+  infoUser: state.menus.infoUser ?? { id: "0", nombre: "Andre Herrera", img: logo }
 });
 
 export default connect(mapStateToProps)(Nabvar);

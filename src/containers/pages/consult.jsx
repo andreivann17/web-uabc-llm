@@ -6,14 +6,23 @@ import Toast from "../../components/toasts/toast.jsx";
 //import {actionDivisas,actionEditar} from "../../redux/actions/divisas/divisas.js"
 import { useEffect } from "react";
 import { useDispatch, connect } from "react-redux";
-const token = localStorage.getItem("tokends");
+import { useNavigate } from "react-router-dom";
+
 function Home({}) {
   const [msg, setMsg] = useState("");
+  const [token,setToken]  = useState(localStorage.getItem("tokends"))
+  const navegate = useNavigate();
   const [showtoast, setShowToast] = useState(false);
 
   useEffect(() => {
     // dispatch(actionDivisas())
   }, []);
+  useEffect(() => {
+    console.log(token)
+    if (token == null) {
+      navegate("/login");
+    }
+  }, [token]);
   return (
     <>
       {token != null && (
