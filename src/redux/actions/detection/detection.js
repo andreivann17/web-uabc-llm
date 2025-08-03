@@ -24,7 +24,7 @@ export const actionDiagnosis = (file, callback) => {
     try {
       const token = localStorage.getItem("tokends");
 
-      const response = await apiServiceGet.post("http://localhost:8000/diagnostic/", formData, {
+      const response = await apiServiceGet.post("http://191.101.14.88:8010/diagnostic/", formData, {
         headers: { 
           'Authorization': `Token ${token}`,
     'Content-Type': undefined  // ⚠️ Muy importante para que axios infiera el boundary
@@ -57,7 +57,7 @@ export const actionChatAskSync = (file,user_question, callback) => {
     try {
       const token = localStorage.getItem("tokends");
 
-      const response = await apiServiceGet.post("http://localhost:8000/chat-sync/", formData, {
+      const response = await apiServiceGet.post("http://191.101.14.88:8010/chat-sync/", formData, {
         headers: { 
           'Authorization': `Token ${token}`,
     'Content-Type': undefined  // ⚠️ Muy importante para que axios infiera el boundary
@@ -87,7 +87,7 @@ export const actionChatAsk = async (context_text, user_question, onToken, callba
   formData.append("user_question", user_question);
 
   try {
-    const response = await fetch("http://localhost:8000/chat/", {
+    const response = await fetch("http://191.101.14.88:8010/chat/", {
       method: "POST",
       body: formData,
     });
