@@ -46,7 +46,20 @@ openNotification("Please complete all fields correctly.");
   };
 
   return (
-    <div className="login-wrapper fade-in">
+    <>
+    <style>
+      {`
+      .login-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f8f9fa;
+  overflow-y: auto;
+}
+
+      `}
+    </style>
+     <div className="login-wrapper fade-in">
       <div className="login-container">
         <div className="login-left">
           <div className="text-center">
@@ -163,6 +176,8 @@ openNotification("Please complete all fields correctly.");
 
       <ModalOlvidar show={show} setShow={setShow} />
     </div>
+    </>
+   
   );
 }
 

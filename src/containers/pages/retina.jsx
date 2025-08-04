@@ -23,14 +23,15 @@ const infoMessages = [
 
 const { Meta } = Card;
 function Home({}) {
-    const canvasRef = useRef(null);
     const neurons = useRef([]);
+const [viewMode, setViewMode] = useState("diagnosis");
+
     const [fadeClass, setFadeClass] = useState("fade-in");
   const [controlNeurons, setControlNeurons] = useState("block")
   const [msg, setMsg] = useState("");
   const [token,setToken]  = useState(localStorage.getItem("tokends"))
   const [selectedImageFile, setSelectedImageFile] = useState(null);
-const [fadeOutLoading, setFadeOutLoading] = useState(false);
+const [fadeOutLoading, setFadeOutLoading] = useState(true);
 const [showExampleModal, setShowExampleModal] = useState(false);
 const exampleImages = [
   { id: 1, src: require("../../assets/img/209_right.jpg"), name: "Ejemplo 1" },
@@ -43,8 +44,18 @@ const dispatch = useDispatch();
 const [loading, setLoading] = useState(false);
 const fileInputRef = React.useRef();
 const [showInfoIndex, setShowInfoIndex] = useState(0);
-const [transitionDone, setTransitionDone] = useState(false);
+const [transitionDone, setTransitionDone] = useState(true);
 
+const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobileOrTablet(window.innerWidth < 1024);
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
   // Cambio de mensaje informativo cada 7s
 useEffect(() => {
@@ -68,75 +79,7 @@ useEffect(() => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const W = window.innerWidth;
-    const H = window.innerHeight;
-    canvas.width = W;
-    canvas.height = H;
 
-    function randomNeuron() {
-      const radius = 5 + Math.random() * 3;
-      return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        dx: (Math.random() - 0.5) * 5,
-        dy: (Math.random() - 0.5) * 5,
-        r: radius,
-        id: Date.now() + Math.random(),
-      };
-    }
-
-    for (let i = 0; i < 10; i++) neurons.current.push(randomNeuron());
-
-    function animate() {
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, W, H);
-
-      for (let i = 0; i < neurons.current.length; i++) {
-        for (let j = i + 1; j < neurons.current.length; j++) {
-          const a = neurons.current[i];
-          const b = neurons.current[j];
-          const dist = Math.hypot(a.x - b.x, a.y - b.y);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = "rgba(0,114,63," + (1 - dist / 100) + ")";
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      neurons.current.forEach(n => {
-        ctx.beginPath();
-        ctx.fillStyle = "#00723F";
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        n.x += n.dx;
-        n.y += n.dy;
-
-        if (n.x < -20 || n.x > W + 20 || n.y < -20 || n.y > H + 20) {
-          Object.assign(n, randomNeuron());
-          n.x = Math.random() < 0.5 ? -10 : W + 10;
-          n.y = Math.random() * H;
-        }
-      });
-
-      requestAnimationFrame(animate);
-    }
-
-    animate();
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
 
 
   useEffect(() => {
@@ -250,9 +193,7 @@ const callbackError = () =>{
           z-index: 1;
         }
       `}</style>
-                   <div style={{display:controlNeurons}}>
-                     <canvas ref={canvasRef} className="neuron-canvas"></canvas>
-                   </div>
+                  
 
       {token == null && (
         <>
@@ -467,11 +408,81 @@ Analyzing retina...
 
 
 {transitionDone && (
- <div style={{zIndex: 4}}>
-    <Chat selectedImageFile={selectedImageFile} selectedImage={selectedImage} />
+  <div style={{ zIndex: 4,  marginTop: "70px", }}>
+    {isMobileOrTablet && (
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        marginBottom: "12px",
+        gap: "8px",
+    
+        padding: "0 16px"
+      }}>
+        <Button
+          block
+          type={viewMode === "diagnosis" ? "primary" : "default"}
+          onClick={() => setViewMode("diagnosis")}
+        >
+          Diagnosis
+        </Button>
+        <Button
+          block
+          type={viewMode === "chat" ? "primary" : "default"}
+          onClick={() => setViewMode("chat")}
+        >
+          Chat
+        </Button>
+      </div>
+    )}
 
-</div>
+    {/* ✅ Asegúrate de que solo se renderice una vista a la vez */}
+    {!isMobileOrTablet && (
+      <div style={{ display: "flex" }}>
+        {/* Puedes renderizar diagnóstico y chat juntos solo en desktop si quieres */}
+        <Chat isMobileOrTablet={isMobileOrTablet} mode={"none"}  selectedImageFile={selectedImageFile} selectedImage={selectedImage} />
+      </div>
+    )}
+
+    {isMobileOrTablet && viewMode === "diagnosis" && (
+      <div style={{ padding: "16px", textAlign: "center" }}>
+        <img
+  src={selectedImage}
+  alt="Retina"
+  style={{
+    maxWidth: "100%",
+    maxHeight: "60vh", // límite de altura razonable
+    marginBottom: "20px",
+    borderRadius: "8px",
+    border: "1px solid #ddd",
+    objectFit: "contain",
+  }}
+/>
+        <div
+          style={{
+            padding: "16px",
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            textAlign: "left",
+            maxWidth: "500px",
+            margin: "auto",
+            color: "#333",
+          }}
+        >
+          <p><strong>Clinical Diagnosis:</strong><br />No diabetic lesions detected; the retinal structure is intact.</p>
+        </div>
+      </div>
+    )}
+
+    {isMobileOrTablet && viewMode === "chat" && (
+      <div>
+        <Chat isMobileOrTablet={isMobileOrTablet} mode={viewMode} selectedImageFile={selectedImageFile} selectedImage={selectedImage} />
+      </div>
+    )}
+  </div>
 )}
+
+
 
 
 
