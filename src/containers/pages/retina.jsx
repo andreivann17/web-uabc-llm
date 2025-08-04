@@ -31,7 +31,7 @@ const [viewMode, setViewMode] = useState("diagnosis");
   const [msg, setMsg] = useState("");
   const [token,setToken]  = useState(localStorage.getItem("tokends"))
   const [selectedImageFile, setSelectedImageFile] = useState(null);
-const [fadeOutLoading, setFadeOutLoading] = useState(true);
+const [fadeOutLoading, setFadeOutLoading] = useState(false);
 const [showExampleModal, setShowExampleModal] = useState(false);
 const exampleImages = [
   { id: 1, src: require("../../assets/img/209_right.jpg"), name: "Ejemplo 1" },
@@ -44,7 +44,7 @@ const dispatch = useDispatch();
 const [loading, setLoading] = useState(false);
 const fileInputRef = React.useRef();
 const [showInfoIndex, setShowInfoIndex] = useState(0);
-const [transitionDone, setTransitionDone] = useState(true);
+const [transitionDone, setTransitionDone] = useState(false);
 
 const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
 
